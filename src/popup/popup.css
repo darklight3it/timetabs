@@ -1,0 +1,71 @@
+body { width: 360px; }
+main { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-3); }
+
+.bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.target { min-width: 0; color: var(--subtext); }
+#next { display: inline-flex; align-items: center; gap: var(--space-1); flex: none; white-space: nowrap; }
+
+/* Segmented "apply to" control built on native radios. */
+.segmented { display: flex; border: 1px solid var(--surface1); border-radius: var(--radius); overflow: hidden; }
+.segmented label { padding: var(--space-1) var(--space-2); cursor: pointer; color: var(--subtext); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.segmented label + label { border-left: 1px solid var(--surface1); }
+.segmented input { position: absolute; opacity: 0; pointer-events: none; }
+.segmented input:checked + span { color: var(--text); font-weight: 600; }
+.segmented label:has(input:checked) { background: var(--surface0); }
+.segmented label:has(input:focus-visible) { outline: 2px solid var(--focus); outline-offset: -2px; }
+
+.priority { display: grid; grid-template-columns: repeat(3, 1fr) auto; gap: var(--space-2); }
+.prio { display: flex; align-items: center; justify-content: center; gap: var(--space-2); padding: var(--space-2); font-weight: 700; }
+.prio-1 { border-color: var(--p1); color: var(--p1); }
+.prio-2 { border-color: var(--p2); color: var(--p2); }
+.prio-3 { border-color: var(--p3); color: var(--p3); }
+.prio[aria-pressed="true"] { color: var(--on-accent); }
+.prio-1[aria-pressed="true"] { background: var(--p1); }
+.prio-2[aria-pressed="true"] { background: var(--p2); }
+.prio-3[aria-pressed="true"] { background: var(--p3); }
+
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chips button { padding: var(--space-1) var(--space-2); }
+.inline { display: flex; gap: var(--space-2); margin-top: var(--space-2); }
+.inline input { flex: 1; min-width: 0; }
+.command { display: flex; gap: var(--space-2); }
+.command input { flex: 1; min-width: 0; padding: var(--space-2) var(--space-3); font-size: 14px; border-color: var(--surface2); }
+.command input:focus-visible { outline-offset: 0; }
+.preview { margin: calc(-1 * var(--space-3)) 0 0; font-size: 12px; color: var(--muted); min-height: 1.4em; }
+.quick { display: flex; flex-direction: column; gap: var(--space-2); }
+.preview.ok { color: var(--ok); }
+.preview.error { color: var(--p1); }
+
+.status { margin: 0; min-height: 1.4em; color: var(--subtext); }
+.status.success { color: var(--ok); }
+.status.error { color: var(--p1); }
+
+details { border-top: 1px solid var(--surface0); border-bottom: 1px solid var(--surface0); padding: var(--space-2) 0; }
+details[open] { display: flex; flex-direction: column; gap: var(--space-3); }
+summary { cursor: pointer; color: var(--subtext); }
+.field { display: flex; flex-direction: column; gap: var(--space-1); }
+.field label { color: var(--subtext); font-size: 12px; }
+.field .inline { margin-top: 0; }
+.check { display: flex; align-items: center; gap: var(--space-2); cursor: pointer; }
+
+.group-title { margin: var(--space-2) 0 var(--space-1); font-size: 11px; font-weight: 600; color: var(--muted); }
+.group-title.late { color: var(--p1); }
+ul.rows { list-style: none; margin: 0; padding: 0; }
+.row { display: flex; align-items: center; gap: var(--space-1); border-radius: var(--radius); }
+.row.late { box-shadow: inset 2px 0 0 var(--p1); }
+.row-main {
+  flex: 1; min-width: 0;
+  display: flex; align-items: baseline; gap: var(--space-2);
+  background: transparent; border-color: transparent; text-align: left;
+}
+.row-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row-when { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.row.late .row-when { color: var(--p1); font-weight: 600; }
+.row-action { background: transparent; border-color: transparent; color: var(--subtext); padding: var(--space-1); font-size: 12px; white-space: nowrap; }
+.row-action:hover { color: var(--text); }
+.row[aria-current="true"] .row-title { font-weight: 600; }
+
+.empty { color: var(--subtext); }
+.empty p { margin: 0 0 var(--space-1); }
+
+.hint { padding: var(--space-2) var(--space-3); font-size: 11px; color: var(--muted); border-top: 1px solid var(--surface0); background: var(--mantle); }

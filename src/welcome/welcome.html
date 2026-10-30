@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Welcome — Timetabs</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { font-size: 14px; }
+    main { max-width: 560px; margin: 0 auto; padding: 48px var(--space-4); display: flex; flex-direction: column; gap: 32px; }
+    h1 { font-size: 22px; }
+    .brand { display: flex; align-items: center; gap: var(--space-3); }
+    p { margin: 0; color: var(--subtext); }
+    section { display: flex; flex-direction: column; gap: var(--space-3); }
+    ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: var(--space-2); }
+    table { border-collapse: collapse; }
+    td { padding: var(--space-1) var(--space-3) var(--space-1) 0; vertical-align: top; }
+    td:first-child { white-space: nowrap; }
+    .actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    #result { min-height: 1.4em; }
+    #result.success { color: var(--ok); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1 class="brand"><img src="../icons/icon-48.png" alt="" width="40" height="40"> Timetabs</h1>
+      <p>Reminders for time-blind brains. Mark the tabs that matter and get nudged back to them.</p>
+    </header>
+
+    <section aria-labelledby="h-start">
+      <h2 id="h-start">Get started</h2>
+      <ol>
+        <li>Pin the extension: click the puzzle-piece icon in the toolbar, then the pin next to Timetabs.</li>
+        <li>On any tab press <kbd>⌥⇧P</kbd>, type <code>1</code> and press <kbd>↵</kbd> to mark it P1.</li>
+        <li>Add a time to be reminded: <code>1 30m</code>, <code>2 fri 9</code> — anything after that becomes a note.</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="h-check">
+      <h2 id="h-check">Check reminders reach you</h2>
+      <p>macOS can silently block Chrome notifications. Send a test — if nothing shows up, switch to the pop-up window, which always works.</p>
+      <div class="actions">
+        <button id="test" class="primary" type="button">Send test notification</button>
+        <button id="use-window" type="button">Use pop-up window instead</button>
+      </div>
+      <p id="result" role="status" aria-live="polite"></p>
+    </section>
+
+    <section aria-labelledby="h-keys">
+      <h2 id="h-keys">Shortcuts</h2>
+      <table>
+        <tbody>
+          <tr><td><kbd>⌥⇧P</kbd></td><td>Open the command bar. Type what you mean, press <kbd>↵</kbd>: <code>1 30m review CR</code>, <code>fri 9</code>, <code>every 1h</code>, <code>done</code>, <code>snooze</code></td></tr>
+          <tr><td><kbd>⌥⇧N</kbd></td><td>Jump to the most urgent tab</td></tr>
+          <tr><td><kbd>⌥⇧S</kbd></td><td>Snooze everything overdue for 10 minutes</td></tr>
+          <tr><td><kbd>⌥⇧1</kbd></td><td>Mark the selected tabs P1 without opening anything</td></tr>
+          <tr><td>In the popup</td><td><kbd>↓</kbd> into the list, <kbd>↵</kbd> go, <kbd>S</kbd> snooze, <kbd>D</kbd> done</td></tr>
+          <tr><td>Right-click the page or toolbar icon</td><td>Timetabs menu: mark, remind, stop</td></tr>
+        </tbody>
+      </table>
+      <div class="actions"><button id="shortcuts" type="button">Customize shortcuts</button></div>
+    </section>
+  </main>
+  <script src="../shared.js"></script>
+  <script src="welcome.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Timetabs</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <header class="bar">
+      <div id="target" class="target"></div>
+      <button id="next" class="ghost" type="button" title="Jump to the most urgent tab (⌥⇧N)">Next</button>
+    </header>
+
+    <form id="command-form" class="command" autocomplete="off">
+      <label for="command" class="visually-hidden">Command</label>
+      <input id="command" spellcheck="false" autofocus
+             placeholder="1 30m review CR · fri 9 · every 1h · done"
+             aria-describedby="command-preview">
+      <button type="submit" class="primary" aria-label="Apply command">↵</button>
+    </form>
+    <p id="command-preview" class="preview"></p>
+
+    <section aria-labelledby="h-quick" class="quick">
+      <h2 id="h-quick" class="visually-hidden">Quick actions</h2>
+      <div class="priority" role="group" aria-label="Priority">
+        <button class="prio prio-1" type="button" data-level="1" aria-pressed="false">P1</button>
+        <button class="prio prio-2" type="button" data-level="2" aria-pressed="false">P2</button>
+        <button class="prio prio-3" type="button" data-level="3" aria-pressed="false">P3</button>
+        <button id="clear" class="ghost" type="button">Clear</button>
+      </div>
+      <div class="chips" role="group" aria-label="Remind me">
+        <button type="button" data-in="15">15m</button>
+        <button type="button" data-in="30">30m</button>
+        <button type="button" data-in="60">1h</button>
+        <button type="button" data-in="180">3h</button>
+        <button type="button" id="tomorrow">Tomorrow 9:00</button>
+        <button type="button" id="calendar" aria-expanded="false" aria-controls="calendar-form">Calendar…</button>
+        <button type="button" id="off">Off</button>
+      </div>
+      <form id="calendar-form" class="inline" hidden>
+        <label for="at" class="visually-hidden">Remind me at</label>
+        <input id="at" type="datetime-local" required>
+        <button type="submit" class="primary">Set</button>
+      </form>
+    </section>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+
+    <details id="more">
+      <summary>More options</summary>
+      <form id="group-form" class="field">
+        <label for="group-name">Group as</label>
+        <div class="inline">
+          <input id="group-name" placeholder="e.g. Launch" required>
+          <button type="submit">Group</button>
+        </div>
+      </form>
+      <label class="check"><input id="group-by-priority" type="checkbox"> Put marked tabs in P1 / P2 / P3 groups</label>
+      <div class="field">
+        <label for="alert-style">Alerts</label>
+        <select id="alert-style">
+          <option value="notification">System notification</option>
+          <option value="window">Pop-up window (always works)</option>
+          <option value="both">Both</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="sound">Sound</label>
+        <select id="sound">
+          <option value="off">Off</option>
+          <option value="soft">Soft</option>
+          <option value="normal">Normal</option>
+          <option value="loud">Loud</option>
+        </select>
+      </div>
+      <div class="inline">
+        <button id="test" type="button">Send test alert</button>
+        <button id="welcome" type="button" class="ghost">Setup &amp; shortcuts</button>
+      </div>
+    </details>
+
+    <section aria-labelledby="h-now">
+      <h2 id="h-now">Now</h2>
+      <div id="list"></div>
+    </section>
+  </main>
+  <footer class="hint">↵ apply · ↓ list · in list: ↵ go · S snooze · D done</footer>
+  <script src="../shared.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

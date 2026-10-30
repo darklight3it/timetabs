@@ -1,0 +1,70 @@
+{
+  "manifest_version": 3,
+  "name": "Timetabs",
+  "version": "2.0.0",
+  "description": "Reminders for time-blind brains. Mark the tabs that matter and get nudged back before you forget them.",
+  "permissions": [
+    "tabs",
+    "tabGroups",
+    "storage",
+    "alarms",
+    "notifications",
+    "contextMenus",
+    "offscreen"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    },
+    "default_title": "Timetabs (⌥⇧P)"
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+P"
+      },
+      "description": "Open Timetabs (command bar)"
+    },
+    "next": {
+      "suggested_key": {
+        "default": "Alt+Shift+N"
+      },
+      "description": "Jump to the most urgent tab"
+    },
+    "snooze-overdue": {
+      "suggested_key": {
+        "default": "Alt+Shift+S"
+      },
+      "description": "Snooze everything overdue for 10 minutes"
+    },
+    "set-p1": {
+      "suggested_key": {
+        "default": "Alt+Shift+1"
+      },
+      "description": "Mark selected tabs P1"
+    },
+    "set-p2": {
+      "description": "Mark selected tabs P2"
+    },
+    "set-p3": {
+      "description": "Mark selected tabs P3"
+    },
+    "clear": {
+      "description": "Clear selected tabs"
+    }
+  },
+  "short_name": "Timetabs"
+}
