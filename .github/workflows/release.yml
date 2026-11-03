@@ -1,0 +1,92 @@
+name: Release
+
+# Push a tag like v2.0.1 (matching src/manifest.json) to build, attach the zip to a GitHub
+# release, and submit it to the Chrome Web Store. Run manually to upload a draft without publishing.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Submit for review after uploading (otherwise leave as a draft)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - id: version
+        name: Check tag matches manifest version
+        run: |
+          version=$(node -p "require('./src/manifest.json').version")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [[ "$GITHUB_REF_TYPE" == tag && "$GITHUB_REF_NAME" != "v$version" ]]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match manifest version v$version"
+            exit 1
+          fi
+      - run: npm test
+      - run: npm run package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: timetabs-${{ steps.version.outputs.version }}
+          path: dist/*.zip
+          if-no-files-found: error
+
+  github-release:
+    if: github.ref_type == 'tag'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: timetabs-${{ needs.build.outputs.version }}
+          path: dist
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          # Use this version's CHANGELOG section as the release notes.
+          awk -v v="$VERSION" '/^## / { on = index($0, "## " v " ") == 1; next } on' CHANGELOG.md > notes.md
+          gh release create "$GITHUB_REF_NAME" dist/*.zip --title "Timetabs $VERSION" --notes-file notes.md
+
+  chrome-web-store:
+    needs: build
+    runs-on: ubuntu-latest
+    # Holds the store secrets; add required reviewers to this environment to gate publishing.
+    environment: chrome-web-store
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          name: timetabs-${{ needs.build.outputs.version }}
+          path: dist
+      - name: Upload and publish
+        env:
+          CWS_CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CWS_CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          CWS_REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+          CWS_PUBLISHER_ID: ${{ vars.CWS_PUBLISHER_ID }}
+          CWS_EXTENSION_ID: ${{ vars.CWS_EXTENSION_ID }}
+          PUBLISH: ${{ github.ref_type == 'tag' || inputs.publish }}
+        run: scripts/publish.sh dist/timetabs-${{ needs.build.outputs.version }}.zip $([[ "$PUBLISH" == true ]] || echo --upload-only)

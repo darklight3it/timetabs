@@ -97,7 +97,9 @@ src/                     the extension — load this folder in Chrome
 ├── offscreen/           plays chimes (workers can't play audio)
 └── icons/
 tests/                   node:test suites and the fake Chrome API
-scripts/                 verify.js (reference checker), package.sh (zip for the store)
+scripts/                 verify.js (reference checker), package.sh (zip for the store),
+                         publish.sh (Chrome Web Store upload), store-assets.sh (listing images)
+store/                   Chrome Web Store listing copy and images
 assets/logo.svg          source artwork for the icons
 docs/                    screenshots
 ```
@@ -106,7 +108,17 @@ docs/                    screenshots
 
 1. Bump `version` in both `src/manifest.json` and `package.json` (`npm run verify` fails if they differ).
 2. Add an entry to [CHANGELOG.md](CHANGELOG.md).
-3. `npm run package` and upload the zip.
+3. Commit, then tag and push: `git tag v<version> && git push origin v<version>`.
+
+The [Release workflow](.github/workflows/release.yml) tests and packages the extension, creates a GitHub release with the zip and the changelog entry, then uploads it to the Chrome Web Store and submits it for review. Run the workflow by hand from the Actions tab to upload a draft without submitting.
+
+**One-time setup:**
+
+1. Register at the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole) and upload the first zip (`npm run package`) by hand, filling in the listing from [store/listing.md](store/listing.md). This creates the item and its ID.
+2. In Google Cloud, enable the **Chrome Web Store API** and create an OAuth client (type *Desktop app*). Get a refresh token for the scope `https://www.googleapis.com/auth/chromewebstore`, e.g. with the [OAuth Playground](https://developers.google.com/oauthplayground) using your own client credentials. Publish the OAuth consent screen to *In production*, or the refresh token expires after 7 days.
+3. In GitHub → Settings → Environments, create an environment named `chrome-web-store` (add yourself as a required reviewer to approve each submission), with:
+   - secrets `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN`
+   - variables `CWS_PUBLISHER_ID` (Dashboard → Publisher → Settings) and `CWS_EXTENSION_ID` (the item ID from step 1)
 
 ## Privacy
 
